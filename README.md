@@ -29,7 +29,7 @@ imports:
     - { resource: '@BeHappySyliusRightsManagementPlugin/Resources/config/app/config.yml' }
 ```
 
-3. Add the following route to routes.yaml:
+3. Add the following route to config/routes/sylius_admin.yaml:
 ```yaml
 be_happy_rights_management:
     resource: '@BeHappySyliusRightsManagementPlugin/Resources/config/routing.yaml'
@@ -38,11 +38,17 @@ be_happy_rights_management:
 
 4. Update your database schema: 
 ```bash
-$ php bin/console doctrine:schema:update --force
+php bin/console doctrine:migrations:diff
+php bin/console doctrine:migrations:migrate
 ```
 
-5. Override AdminUser template to add group select:
-    1) Create a file: app/Resources/SyliusAdminBundle/views/AdminUser/_form.html.twig
+5. Copy the contents of the original template: 
+```bash
+cp -R vendor/albertirse/rights-management-plugin/src/Resources/views/Admin/Group/ templates/BeHappySyliusRightsManagementPlugin/Admin/Group/
+```
+
+6. Override AdminUser template to add group select:
+    1) Create a file: templates/bundles/SyliusAdminBundle/AdminUser/_form.html.twig
     
     2) In the freshly created file, put the content of [_form.html.twig](https://github.com/Sylius/SyliusAdminBundle/blob/master/Resources/views/AdminUser/_form.html.twig)
     
@@ -53,7 +59,7 @@ $ php bin/console doctrine:schema:update --force
         {{ form_widget(form.group) }}
     </div>
     ```
-6. Clear cache to load translation correctly 
+7. Clear cache to load translation correctly 
 ```bash
 $ php bin/console cache:clear
 ``` 
@@ -62,6 +68,7 @@ Group can only grant or deny access to listed routes.
 To list route, add to your config.yml.
 
 Example:
+add config/packages/be_happy_sylius_rights_management.yaml
 ```yaml
 be_happy_sylius_rights_management:
     rights:
