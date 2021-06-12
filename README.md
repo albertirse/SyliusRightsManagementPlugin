@@ -5,7 +5,7 @@ A rights management plugin for Sylius.
 
 1. Run 
 ```bash
-$ composer require behappy/rights-management-plugin
+$ composer require albertirse/rights-management-plugin
 ```
 
 2. Enable the plugin in config/bundles.php:

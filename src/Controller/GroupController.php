@@ -20,6 +20,9 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  */
 class GroupController extends ResourceController
 {
+
+    public const BLOCK_TEMPLATE_CREATE = "@BeHappySyliusRightsManagementPlugin/Admin/Group/create.html.twig";
+    public const BLOCK_TEMPLATE_UPDATE = "@BeHappySyliusRightsManagementPlugin/Admin/Group/update.html.twig";
     /**
      * @param Request $request
      *
@@ -83,19 +86,17 @@ class GroupController extends ResourceController
         }
         
         $this->eventDispatcher->dispatchInitializeEvent(ResourceActions::CREATE, $configuration, $newResource);
-        
-        $view = View::create()
-            ->setData([
-                'configuration' => $configuration,
-                'metadata' => $this->metadata,
-                'resource' => $newResource,
-                $this->metadata->getName() => $newResource,
-                'form' => $form->createView(),
-            ])
-            ->setTemplate($configuration->getTemplate(ResourceActions::CREATE . '.html'))
-        ;
-        
-        return $this->viewHandler->handle($configuration, $view);
+
+        $template = $request->get('template') ?? self::BLOCK_TEMPLATE_CREATE;
+
+        return $this->render($template, [
+            'configuration' => $configuration,
+            'metadata' => $this->metadata,
+            'resource' => $newResource,
+            $this->metadata->getName() => $newResource,
+            'form' => $form->createView(),
+        ]);
+
     }
     
     /**
@@ -163,17 +164,15 @@ class GroupController extends ResourceController
         
         $this->eventDispatcher->dispatchInitializeEvent(ResourceActions::UPDATE, $configuration, $resource);
         
-        $view = View::create()
-            ->setData([
-                'configuration' => $configuration,
-                'metadata' => $this->metadata,
-                'resource' => $resource,
-                $this->metadata->getName() => $resource,
-                'form' => $form->createView(),
-            ])
-            ->setTemplate($configuration->getTemplate(ResourceActions::UPDATE . '.html'))
-        ;
-        
-        return $this->viewHandler->handle($configuration, $view);
+        $template = $request->get('template') ?? self::BLOCK_TEMPLATE_UPDATE;
+
+        return $this->render($template, [
+            'configuration' => $configuration,
+            'metadata' => $this->metadata,
+            'resource' => $resource,
+            $this->metadata->getName() => $resource,
+            'form' => $form->createView(),
+        ]);
+
     }
 }

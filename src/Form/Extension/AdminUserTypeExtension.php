@@ -29,7 +29,7 @@ class AdminUserTypeExtension extends AbstractTypeExtension
             ])
         ;
     }
-
+    
     /**
      * Returns the name of the type being extended.
      *
@@ -38,5 +38,10 @@ class AdminUserTypeExtension extends AbstractTypeExtension
     public function getExtendedType(): string
     {
         return AdminUserType::class;
+    }
+
+    public static function getExtendedTypes(): iterable
+    {
+        return [AdminUserType::class];
     }
 }
